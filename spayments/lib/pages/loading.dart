@@ -6,6 +6,11 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacementNamed(context,'/home');
+    });
+
     return const Scaffold(
       backgroundColor:Color.fromARGB(255, 7, 60, 103),
       body: Center(
