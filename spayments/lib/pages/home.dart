@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
                 onTap: () {
                   print("tap");
                 },
-                title: Text(list[index].name,style: TextStyle(letterSpacing: 0.5)),
+                title: Text(list[index].name,style: const TextStyle(letterSpacing: 0.5)),
                 leading: const  Icon(
                   Icons.circle,
                   color: Color.fromARGB(255, 7, 60, 103),
@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
         }
       ),
       floatingActionButton:   FloatingActionButton(
-        onPressed: () {  },
+        onPressed: () { Navigator.pushNamed(context,"/addpaymentslot"); },
         backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         child: const Icon(Icons.add),
       ),

@@ -14,9 +14,8 @@ class _LoadingState extends State<Loading> {
   @override
   void initState(){
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
-      print("lol");
-      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> Home()));
+    Future.delayed(const Duration(milliseconds: 750), () {
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> const Home()));
     });
   }
     
