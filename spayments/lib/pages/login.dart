@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:spayments/models/paymentSlot.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,6 +14,9 @@ class _LoginState extends State<Login> {
   final localStorage = Hive.box("localStorage");
   String name = '';
   String error = '';
+  List<PaymentSlot> slots = [PaymentSlot("lol", 50, true),
+    PaymentSlot("lol222", -1, false),
+    PaymentSlot("lol2", -1, false)];
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +86,8 @@ class _LoginState extends State<Login> {
       });
     }else{
       await localStorage.put('Name', name);
+      Navigator.pushReplacementNamed(context, "/loading");
+      //await localStorage.put('Slots',slots);
     }
   }
 

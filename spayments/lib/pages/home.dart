@@ -1,37 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:spayments/models/paymentSlot.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final localStorage = Hive.box("localStorage");
+
+  //dynamic list = localStorage.get("Slots");
+  List<PaymentSlot> list = [];
+  void initState(){
+    super.initState();
+    list = localStorage.get("Slots");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title:  Text('Σpayments',
-          style: TextStyle(color:Colors.amber[900],letterSpacing: 5.0,),
+        automaticallyImplyLeading: false,
+        title: Row( children: const <Widget>[
+          Text("Σ",
+            style:TextStyle(
+              fontSize: 28,
+              letterSpacing: 4,
+              fontWeight: FontWeight.w600,
+              color:Color.fromARGB(255, 255, 111, 0)
+            )
+          ),
+          Text("payments",
+            style:TextStyle(
+              fontSize: 23,
+              letterSpacing: 4,
+              color: Colors.white,
+              fontWeight: FontWeight.w500
+            )
+          )]
         ),
-        centerTitle: true,
-        backgroundColor: Colors.grey[850],
+        backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         elevation: 0.0,
       ),
-      body: const Center(
-        child: Text(
-          'hello, bitches!',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
-            color: Colors.amber,
-            fontFamily: 'IndieFlower',
-          ),
-        ),
+      body: ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+            child: Card(
+              shadowColor: const Color.fromARGB(255, 7, 60, 103),
+              child: ListTile(
+                onTap: () {
+                  print("tap");
+                },
+                title: Text(list[index].name,style: TextStyle(letterSpacing: 0.5)),
+                leading: const  Icon(
+                  Icons.circle,
+                  color: Color.fromARGB(255, 7, 60, 103),
+                  size: 20,
+                ),
+              ),
+            ),
+          );
+        }
       ),
       floatingActionButton:   FloatingActionButton(
         onPressed: () {  },
-        backgroundColor: Colors.amber[900],
+        backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         child: const Icon(Icons.add),
       ),
     );
   }
-}//Exception: Unable to find suitable Visual Studio toolchain. Please run `flutter doctor` for more details.
+}

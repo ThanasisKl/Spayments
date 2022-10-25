@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:spayments/pages/home.dart';
 
-class Loading extends StatelessWidget {
+class Loading extends StatefulWidget {
   const Loading({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<Loading> createState() => _LoadingState();
+}
 
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context,'/home');
+class _LoadingState extends State<Loading> {
+
+  @override
+  void initState(){
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      print("lol");
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=> Home()));
     });
-
+  }
+    
+  @override
+  Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor:Color.fromARGB(255, 7, 60, 103),
       body: Center(
