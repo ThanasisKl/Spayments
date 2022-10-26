@@ -26,6 +26,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
           backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         ),
         body:
+          Center(child: SingleChildScrollView(child: 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -90,7 +91,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                       inactiveTrackColor: Colors.grey.shade400,
                       splashRadius: 20.0,
                       value: switchBtn,
-                      onChanged: (value) => setState(() { switchBtn = value;print(switchBtn);}),
+                      onChanged: (value) => setState(() { switchBtn = value;}),
                     ),
                   ]
                 ),
@@ -146,7 +147,9 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
               ],
             ),
           ),
-        );
+        )
+      )
+    );
   }
 
   Future<void> signIn() async{

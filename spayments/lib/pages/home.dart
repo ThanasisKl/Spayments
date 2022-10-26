@@ -54,7 +54,9 @@ class _HomeState extends State<Home> {
               shadowColor: const Color.fromARGB(255, 7, 60, 103),
               child: ListTile(
                 onTap: () {
-                  print("tap");
+                  Navigator.pushNamed(context, "/payments",arguments:{
+                    'slotName':list[index].name
+                  });
                 },
                 title: Text(list[index].name,style: const TextStyle(letterSpacing: 0.5)),
                 leading: const  Icon(

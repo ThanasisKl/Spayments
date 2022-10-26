@@ -24,5 +24,6 @@ class PaymentSlot extends HiveObject{
   
   void newPayment(double amount){
     totalMoneySpent += amount;
+    paymentsList.add(Payment("title", amount));
   }
 }
