@@ -12,11 +12,19 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
 
   final localStorage = Hive.box("localStorage");
-  String name = '';
+  String name_input = '';
   String error = '';
+  bool firstLogIn = false;
+  String name = "";
+  void initState(){
+    super.initState();
+    name = localStorage.get("Name") ==  null ? "" : localStorage.get("Name");
+    firstLogIn = localStorage.get("Name") ==  null;
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(firstLogIn);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -26,9 +34,9 @@ class _LoginState extends State<Login> {
             body:
                 Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      const SizedBox(height: 80.0,),
+
                       Container(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
                         child: Row(
@@ -37,22 +45,49 @@ class _LoginState extends State<Login> {
                             Text("payments",style:TextStyle(fontSize: 39,letterSpacing: 4,color: Color.fromARGB(255, 7, 60, 103),fontWeight: FontWeight.w500,))],
                         ),
                         ),
-                      const SizedBox(height: 50.0,),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(90.0),
+                      Visibility(
+                        visible: firstLogIn,
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                              labelText: 'Name',
                             ),
-                            labelText: 'Name',
+                            onChanged: (val) {
+                              setState(() => name_input = val);
+                            },
                           ),
-                          onChanged: (val) {
-                            setState(() => name = val);
-                          },
                         ),
                       ),
-  
+                      Visibility(
+                        visible: !firstLogIn,
+                        child: Column(
+                          children:  <Widget>[
+                            const Text("Welcome Back",
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1,
+                              )
+                            ),
+
+                            const SizedBox(height: 20.0),
+
+                            Text(name,
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1,
+                                color: Color.fromARGB(255, 7, 60, 103),
+                              )
+                            )
+                          ]
+                        ) 
+                      ),
+                      const SizedBox(height: 90.0,),
                       Container(
                           height: 80,
                           padding: const EdgeInsets.all(20),
@@ -77,23 +112,19 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> signIn() async{
-    if(name.trim() == ""){
+    if(name_input.trim() == "" && firstLogIn){
       setState(() {
         error = "Please Enter your Name";
       });
     }else{
-      await localStorage.put('Name', name);
+
+      await localStorage.put('Name', name_input);
       Navigator.pushReplacementNamed(context, "/loading");
     }
   }
-
-  
-
 }
-
 
 Future<void> checkUser() async{
     var box = await Hive.openBox('localStorage');
     String name = box.get('Name');
-    print(name);
 }

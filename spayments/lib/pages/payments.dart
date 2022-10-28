@@ -19,12 +19,15 @@ class _PaymentsState extends State<Payments> {
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context)?.settings.arguments as Map;
+    String  slotName = data["slotName"];
 
     List<PaymentSlot> paymentsSlots = localStorage.get("Slots");
     for(int i = 0; i < paymentsSlots.length; i++){
-      if(paymentsSlots[i].name == data['slotName']){
-        paymentsList = paymentsSlots[i].paymentsList;
-        slot = paymentsSlots[i];
+      if(paymentsSlots[i].name == slotName){
+        setState(() {
+          paymentsList = paymentsSlots[i].paymentsList;
+          slot = paymentsSlots[i];
+        });
         break;
       }
     }
@@ -32,7 +35,7 @@ class _PaymentsState extends State<Payments> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: const Text("New Payment"),
+        title:  Text(slotName),
         backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         elevation: 0.0,
         actions: <Widget>[
@@ -50,11 +53,25 @@ class _PaymentsState extends State<Payments> {
         Column(
           children:<Widget>[
             const SizedBox(height: 20.0),
-            Text("Total money spent: ${slot.totalMoneySpent} €"),
+            Text("Total money spent: ${slot.totalMoneySpent} €",style: 
+              const TextStyle(
+                color:Color.fromARGB(255, 7, 60, 103) ,
+                fontWeight: FontWeight.w600,
+                fontSize: 23,
+                letterSpacing: 1.0
+              ),
+            ),
             const SizedBox(height: 10.0),
             Visibility(
               visible: slot.limitFlag,
-              child:Text("Limit: ${slot.limit} €"), 
+              child:Text("Limit: ${slot.limit} €",style: 
+                const TextStyle(
+                  color:Color.fromARGB(255, 211, 17, 3) ,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 23,
+                  letterSpacing: 1.0
+                ),
+              ), 
             ),
             
             ListView.builder(
@@ -68,12 +85,27 @@ class _PaymentsState extends State<Payments> {
                     shadowColor: const Color.fromARGB(255, 7, 60, 103),
                     child: ListTile(
                       onTap: () {},
-                      title: Text(paymentsList[index].title,style: const TextStyle(letterSpacing: 0.5)),
-                      leading: const  Icon(
-                        Icons.circle,
-                        color: Color.fromARGB(255, 7, 60, 103),
-                        size: 20,
-                      ),
+                      title:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[ 
+                            Text(paymentsList[index].title,
+                              style: const TextStyle(letterSpacing: 0.5)
+                            ),
+                            Text(paymentsList[index].amount.toString()+" €",
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 232, 23, 9),
+                              )
+                            ),
+                            IconButton( 
+                                icon: const Icon(Icons.delete),
+                                color: const Color.fromARGB(255, 211, 17, 3) ,
+                                onPressed: () {
+                                  print("delete payment");
+                                },
+                            )
+                            
+                        ])
                     ),
                   ),
                 );
@@ -82,7 +114,9 @@ class _PaymentsState extends State<Payments> {
           ]
         ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {  },
+        onPressed: () {Navigator.pushNamed(context, '/addpayment', arguments: {
+          'slotName': slotName
+        });  },
         backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         child: const Icon(Icons.add),
       ),

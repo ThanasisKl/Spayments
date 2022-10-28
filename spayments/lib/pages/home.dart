@@ -16,7 +16,7 @@ class _HomeState extends State<Home> {
   List<PaymentSlot> list = [];
   void initState(){
     super.initState();
-    list = localStorage.get("Slots");
+    list = localStorage.get("Slots").reversed.toList();
   }
 
   @override

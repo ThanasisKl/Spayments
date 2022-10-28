@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spayments/pages/addPaymentSlot.dart';
+import 'package:spayments/pages/addPayment.dart';
 import 'package:spayments/pages/home.dart';
 import 'package:spayments/pages/loading.dart';
 import 'package:spayments/pages/login.dart';
@@ -10,11 +11,9 @@ import 'package:spayments/models/payment.dart';
 import 'package:spayments/pages/payments.dart';
 
 void main() async {
-  PaymentSlot x = PaymentSlot("γιτ", 50, true);
-  x.newPayment(12);
-  List<PaymentSlot> slots = [PaymentSlot("lol", 50, true),
-    PaymentSlot("lol222", -1, false),
-    PaymentSlot("lol2", -1, false),x];
+  PaymentSlot x = PaymentSlot("Έξοδα εβδομάδας", 50, true);
+  x.newPayment(12,"supermarket");
+  List<PaymentSlot> slots = [x];
   //initialize Hive 
   await Hive.initFlutter();
 
@@ -24,9 +23,9 @@ void main() async {
   //open the box
   var box = await Hive.openBox("localStorage");
   await box.delete("Slots");
-  await box.delete("Name");
+  //await box.delete("Name");
   if(box.get("Slots") == null) {
-    await box.put("Slots",/*<PaymentSlot>[]*/ slots);
+    await box.put("Slots",<PaymentSlot>[x]);
   }
   runApp(MyApp());
 }
@@ -46,6 +45,7 @@ class MyApp extends StatelessWidget {
       '/loading': (context) => const Loading(),
       '/addpaymentslot': (context) => const AddPaymentSlot(),
       '/payments' : (context) => const Payments(),
+      '/addpayment' : (context) => const AddPayment()
     });     
   }
 }

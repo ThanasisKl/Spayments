@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:spayments/models/paymentSlot.dart';
 
-class AddPaymentSlot extends StatefulWidget {
-  const AddPaymentSlot({super.key});
+class AddPayment extends StatefulWidget {
+  const AddPayment({super.key});
 
   @override
-  State<AddPaymentSlot> createState() => _AddPaymentSlotState();
+  State<AddPayment> createState() => _AddPaymentState();
 }
 
-class _AddPaymentSlotState extends State<AddPaymentSlot> {
+class _AddPaymentState extends State<AddPayment> {
 
   final localStorage = Hive.box("localStorage");
 
+  
   String slotName = '';
+  String purchase_money = '';
   String error = '';
+  String purchase_name = "";
   bool switchBtn = false;
-  String limit = "";
 
   @override
   Widget build(BuildContext context) {
+    Map data = ModalRoute.of(context)?.settings.arguments as Map;
+    String  slotName = data["slotName"];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -33,7 +37,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
             ),
           ),
           elevation: 0.0,
-          title: const Text('Add Payment Category'),
+          title: const Text('Add Payment'),
           backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         ),
         body:
@@ -71,14 +75,15 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(90.0),
                       ),
-                      labelText: 'Payment Category Name',
+                      labelText: 'Money',
                     ),
                     onChanged: (val) {
-                      setState(() => slotName = val);
+                      setState(() => purchase_money = val);
                     },
                   ),
                 ),
@@ -88,7 +93,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text("Add limit to the money you want to spend",
+                    const Text("Add a name to your purchase",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
@@ -114,15 +119,14 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextField(
-                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
-                        labelText: 'Limit',
+                        labelText: 'Purchase Name',
                       ),
                       onChanged: (val) {
-                        setState(() => limit = val);
+                        setState(() => purchase_name = val);
                       },
                     ),
                   ),
@@ -136,13 +140,13 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                       minimumSize: const Size.fromHeight(50),
                       backgroundColor: const Color.fromARGB(255, 7, 60, 103),
                     ),
-                    child: const Text('Add Payment Category',
+                    child: const Text('Add Payment',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.8
                       )
                     ),
-                    onPressed: () {signIn();},
+                    onPressed: () {checkInputs();},
                   )
                 ),
                 
@@ -163,40 +167,28 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
     );
   }
 
-  Future<void> signIn() async{
-    if(slotName.trim() == ""){
+  Future<void> checkInputs() async{
+    if (double.tryParse(purchase_money) == null || purchase_money == ""){
       setState(() {
-        error = "Please Enter your Name";
-      });
-    }else if(categoryAlreadyExists()){
-      setState(() {
-        error = "Category Name already in use, please select another one";
-      });
-    }else if(switchBtn && (double.tryParse(limit) == null || limit == "")){
-      setState(() {
-        error = "Please put a numeric value as a limit";
+        error = "Please put a numeric value for Money";
       });
     }else{
-      List<PaymentSlot> newSlots = localStorage.get("Slots");
+      List<PaymentSlot> slots = localStorage.get("Slots");
+      List<PaymentSlot> newSlots =[];
+      int index = 0;
+      for(int i=0; i < slots.length; i++){
+        newSlots.add(slots[i]);
+        if (slots[i].name == slotName){
+          index = i;
+        }
+      }
+      newSlots[index].newPayment(double.tryParse(purchase_money)!, purchase_name.trim()=="" ? "unknown" : purchase_name);
 
-      newSlots.add(
-        PaymentSlot(slotName, switchBtn ? double.tryParse(limit)! : -1 , switchBtn)
-      );
+      
       await localStorage.delete("Slots");
 
       await localStorage.put('Slots', newSlots);
-
-      Navigator.pushReplacementNamed(context, "/loading");
+      Navigator.pushReplacementNamed(context,'/loading');
     }
-  }
-
-  bool categoryAlreadyExists(){
-    List<PaymentSlot> slots = localStorage.get("Slots");
-    for(int i = 0; i<slots.length;i++){
-      if(slots[i].name == slotName){
-        return true;
-      }
-    }
-    return false;
   }
 }
