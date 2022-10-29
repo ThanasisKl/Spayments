@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
   final localStorage = Hive.box("localStorage");
 
   //dynamic list = localStorage.get("Slots");
-  List<PaymentSlot> list = [];
+  List<dynamic> list = [];
   void initState(){
     super.initState();
     list = localStorage.get("Slots").reversed.toList();

@@ -11,9 +11,9 @@ import 'package:spayments/models/payment.dart';
 import 'package:spayments/pages/payments.dart';
 
 void main() async {
-  PaymentSlot x = PaymentSlot("Έξοδα εβδομάδας", 50, true);
-  x.newPayment(12,"supermarket");
-  List<PaymentSlot> slots = [x];
+  //PaymentSlot x = PaymentSlot("Έξοδα εβδομάδας", 50, true);
+  //x.newPayment(12,"supermarket");
+  //List<PaymentSlot> slots = [x];
   //initialize Hive 
   await Hive.initFlutter();
 
@@ -22,10 +22,11 @@ void main() async {
 
   //open the box
   var box = await Hive.openBox("localStorage");
-  await box.delete("Slots");
+  //await box.delete("Slots");
   //await box.delete("Name");
   if(box.get("Slots") == null) {
-    await box.put("Slots",<PaymentSlot>[x]);
+    List<dynamic> emptyList = [];
+    await box.put("Slots",emptyList);
   }
   runApp(MyApp());
 }

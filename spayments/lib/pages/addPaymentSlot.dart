@@ -142,7 +142,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                         letterSpacing: 0.8
                       )
                     ),
-                    onPressed: () {signIn();},
+                    onPressed: () {addPaymentCategory();},
                   )
                 ),
                 
@@ -163,7 +163,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
     );
   }
 
-  Future<void> signIn() async{
+  Future<void> addPaymentCategory() async{
     if(slotName.trim() == ""){
       setState(() {
         error = "Please Enter your Name";
@@ -177,7 +177,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
         error = "Please put a numeric value as a limit";
       });
     }else{
-      List<PaymentSlot> newSlots = localStorage.get("Slots");
+      List<dynamic> newSlots = localStorage.get("Slots");
 
       newSlots.add(
         PaymentSlot(slotName, switchBtn ? double.tryParse(limit)! : -1 , switchBtn)
@@ -191,7 +191,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
   }
 
   bool categoryAlreadyExists(){
-    List<PaymentSlot> slots = localStorage.get("Slots");
+    List<dynamic> slots = localStorage.get("Slots");
     for(int i = 0; i<slots.length;i++){
       if(slots[i].name == slotName){
         return true;

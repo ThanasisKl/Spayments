@@ -23,7 +23,7 @@ class _AddPaymentState extends State<AddPayment> {
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context)?.settings.arguments as Map;
-    String  slotName = data["slotName"];
+    slotName = data["slotName"];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -173,7 +173,7 @@ class _AddPaymentState extends State<AddPayment> {
         error = "Please put a numeric value for Money";
       });
     }else{
-      List<PaymentSlot> slots = localStorage.get("Slots");
+      List<dynamic> slots = localStorage.get("Slots");
       List<PaymentSlot> newSlots =[];
       int index = 0;
       for(int i=0; i < slots.length; i++){

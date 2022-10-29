@@ -21,7 +21,7 @@ class _PaymentsState extends State<Payments> {
     Map data = ModalRoute.of(context)?.settings.arguments as Map;
     String  slotName = data["slotName"];
 
-    List<PaymentSlot> paymentsSlots = localStorage.get("Slots");
+    List<dynamic> paymentsSlots = localStorage.get("Slots");
     for(int i = 0; i < paymentsSlots.length; i++){
       if(paymentsSlots[i].name == slotName){
         setState(() {
