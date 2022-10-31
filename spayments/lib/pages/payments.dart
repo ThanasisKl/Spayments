@@ -52,10 +52,10 @@ class _PaymentsState extends State<Payments> {
         ],
       ),
       body: 
-        Column(
+        SingleChildScrollView( child: Column(
           children:<Widget>[
             const SizedBox(height: 20.0),
-            Text("Total money spent: ${slot.totalMoneySpent} €",style: 
+            Text("Total money spent: ${slot.totalMoneySpent.toStringAsFixed(2)} €",style: 
               const TextStyle(
                 color:Color.fromARGB(255, 7, 60, 103) ,
                 fontWeight: FontWeight.w600,
@@ -68,7 +68,7 @@ class _PaymentsState extends State<Payments> {
               visible: slot.limitFlag,
               child: Column(
                 children:<Widget> [
-                  Text("Limit: ${slot.limit} €",style: 
+                  Text("Limit: ${slot.limit.toStringAsFixed(2)} €",style: 
                     const TextStyle(
                       color:Color.fromARGB(255, 211, 17, 3) ,
                       fontWeight: FontWeight.w600,
@@ -79,7 +79,7 @@ class _PaymentsState extends State<Payments> {
 
                   const SizedBox(height: 10.0),
 
-                  Text(slot.limit >= slot.totalMoneySpent ? "Money left to spend: ${slot.limit-slot.totalMoneySpent} €" : "Above the limit: ${-slot.limit+slot.totalMoneySpent} €" ,style: 
+                  Text(slot.limit >= slot.totalMoneySpent ? "Money left to spend: ${(slot.limit-slot.totalMoneySpent).toStringAsFixed(2)} €" : "Above the limit: ${(-slot.limit+slot.totalMoneySpent).toStringAsFixed(2)} €" ,style: 
                     TextStyle(
                       color: slot.limit >= slot.totalMoneySpent ?Colors.green :  const Color.fromARGB(255, 136, 11, 2),
                       fontWeight: FontWeight.w600,
@@ -92,9 +92,22 @@ class _PaymentsState extends State<Payments> {
                 ]
               )
             ),
+
+            Visibility(
+              visible: paymentsList.isEmpty,
+              child: const Padding(
+                padding:  EdgeInsets.all(16.0),
+                child: Text("Add a new payment (for example supermarket - 20.5€) by clicking the bottom right button",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 18
+                  ),
+                )
+              )
+            ),
             
             ListView.builder(
-              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: paymentsList.length,
               itemBuilder: (context, index) {
@@ -108,47 +121,62 @@ class _PaymentsState extends State<Payments> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[ 
-                            Text(paymentsList[index].title,
-                              style: const TextStyle(letterSpacing: 0.5)
-                            ),
-                            Text(paymentsList[index].amount.toString()+" €",
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 232, 23, 9),
+
+                            Expanded(
+                              flex: 3,
+                              child: Text(paymentsList[index].title,
+                                style: const TextStyle(
+                                  letterSpacing: 0.5
+                                )
                               )
                             ),
-                            IconButton( 
-                              icon: const Icon(Icons.delete),
-                              color: const Color.fromARGB(255, 211, 17, 3) ,
-                              onPressed: () {
-                                showDialog(
-                                  context:context ,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text("Warning"),
-                                    content:  Text('Are you sure you want to delete the payment: ${paymentsList[index].title} ${paymentsList[index].amount.toString()} €"'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context), 
-                                        child: const Text("NO")
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          deletePayment(paymentsList[index].title,paymentsList[index].amount);
-                                          Navigator.pop(context);
-                                        }, 
-                                        child: const Text("YES")
-                                      )
-                                    ],
-                                  )
-                                );
-                              },
+
+                            Expanded(
+                              flex: 2,
+                              child: Text(paymentsList[index].amount.toString()+" €",
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 232, 23, 9),
+                                )
+                              )
+                            ),
+
+                            Expanded(
+                              flex: 1,
+                              child: IconButton( 
+                                icon: const Icon(Icons.delete),
+                                color: const Color.fromARGB(255, 211, 17, 3) ,
+                                onPressed: () {
+                                  showDialog(
+                                    context:context ,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text("Warning"),
+                                      content:  Text('Are you sure you want to delete the payment: ${paymentsList[index].title} ${paymentsList[index].amount.toString()} €"'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context), 
+                                          child: const Text("NO")
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            deletePayment(paymentsList[index].title,paymentsList[index].amount);
+                                            Navigator.pop(context);
+                                          }, 
+                                          child: const Text("YES")
+                                        )
+                                      ],
+                                    )
+                                  );
+                                }
+                              )
                             )  
-                        ])
+                          ]
+                        )
                     ),
                   ),
                 );
               }
             )
-          ]
+          ])
         ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {Navigator.pushNamed(context, '/addpayment', arguments: {

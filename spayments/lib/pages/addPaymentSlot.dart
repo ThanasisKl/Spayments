@@ -21,6 +21,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner:false,
       home: Scaffold(
         appBar: AppBar(
           leading: InkWell(
@@ -71,6 +72,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                   child: TextField(
+                    maxLength: 18,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(90.0),

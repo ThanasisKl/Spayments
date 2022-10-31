@@ -45,30 +45,49 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         elevation: 0.0,
       ),
-      body: ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
-            child: Card(
-              shadowColor: const Color.fromARGB(255, 7, 60, 103),
-              child: ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, "/payments",arguments:{
-                    'slotName':list[index].name
-                  });
-                },
-                title: Text(list[index].name,style: const TextStyle(letterSpacing: 0.5)),
-                leading: const  Icon(
-                  Icons.circle,
-                  color: Color.fromARGB(255, 7, 60, 103),
-                  size: 20,
+      body: SingleChildScrollView(
+        child: Column(
+        children: <Widget>[
+          Visibility(
+            visible: list.isEmpty,
+            child: const Padding(
+              padding:  EdgeInsets.all(16.0),
+              child: Text("Add a new payment category (for example weekly expenses) by clicking the bottom right button",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 18
                 ),
-              ),
-            ),
-          );
-        }
-      ),
+              )
+            )
+          ),
+          ListView.builder(
+            itemCount: list.length,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                child: Card(
+                  shadowColor: const Color.fromARGB(255, 7, 60, 103),
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/payments",arguments:{
+                        'slotName':list[index].name
+                      });
+                    },
+                    title: Text(list[index].name,style: const TextStyle(letterSpacing: 0.5)),
+                    leading: const  Icon(
+                      Icons.circle,
+                      color: Color.fromARGB(255, 7, 60, 103),
+                      size: 20,
+                    ),
+                  ),
+                ),
+              );
+            }
+          ),
+        ])),
+      //),
       floatingActionButton:   FloatingActionButton(
         onPressed: () { Navigator.pushNamed(context,"/addpaymentslot"); },
         backgroundColor: const Color.fromARGB(255, 7, 60, 103),

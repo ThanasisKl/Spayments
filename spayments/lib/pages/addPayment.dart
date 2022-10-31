@@ -119,6 +119,7 @@ class _AddPaymentState extends State<AddPayment> {
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: TextField(
+                      maxLength: 18,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),

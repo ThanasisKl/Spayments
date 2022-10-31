@@ -93,6 +93,7 @@ class _SettingsState extends State<Settings> {
                           Container(
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                             child: TextField(
+                              maxLength: 18,
                               decoration: InputDecoration(
                                 hintText: slotName,
                                 border: OutlineInputBorder(
