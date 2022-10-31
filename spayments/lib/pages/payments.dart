@@ -15,11 +15,12 @@ class _PaymentsState extends State<Payments> {
   final localStorage = Hive.box("localStorage");
   List<Payment> paymentsList = [];
   PaymentSlot slot = PaymentSlot("init", -1, false);
+  String  slotName = "";
  
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context)?.settings.arguments as Map;
-    String  slotName = data["slotName"];
+    slotName = data["slotName"];
 
     List<dynamic> paymentsSlots = localStorage.get("Slots");
     for(int i = 0; i < paymentsSlots.length; i++){
@@ -44,8 +45,9 @@ class _PaymentsState extends State<Payments> {
               Icons.settings,
               color: Colors.white,
             ),
-            onPressed: () {
-            },
+            onPressed: () {Navigator.pushNamed(context, '/settings',arguments: {
+              'slotName': slotName
+            });},
           )
         ],
       ),
@@ -64,14 +66,31 @@ class _PaymentsState extends State<Payments> {
             const SizedBox(height: 10.0),
             Visibility(
               visible: slot.limitFlag,
-              child:Text("Limit: ${slot.limit} €",style: 
-                const TextStyle(
-                  color:Color.fromARGB(255, 211, 17, 3) ,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 23,
-                  letterSpacing: 1.0
-                ),
-              ), 
+              child: Column(
+                children:<Widget> [
+                  Text("Limit: ${slot.limit} €",style: 
+                    const TextStyle(
+                      color:Color.fromARGB(255, 211, 17, 3) ,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 23,
+                      letterSpacing: 1.0
+                    )
+                  ),
+
+                  const SizedBox(height: 10.0),
+
+                  Text(slot.limit >= slot.totalMoneySpent ? "Money left to spend: ${slot.limit-slot.totalMoneySpent} €" : "Above the limit: ${-slot.limit+slot.totalMoneySpent} €" ,style: 
+                    TextStyle(
+                      color: slot.limit >= slot.totalMoneySpent ?Colors.green :  const Color.fromARGB(255, 136, 11, 2),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 23,
+                      letterSpacing: 1.0
+                    ),
+                  ),
+
+                  const SizedBox(height: 10.0),
+                ]
+              )
             ),
             
             ListView.builder(
@@ -98,13 +117,31 @@ class _PaymentsState extends State<Payments> {
                               )
                             ),
                             IconButton( 
-                                icon: const Icon(Icons.delete),
-                                color: const Color.fromARGB(255, 211, 17, 3) ,
-                                onPressed: () {
-                                  print("delete payment");
-                                },
-                            )
-                            
+                              icon: const Icon(Icons.delete),
+                              color: const Color.fromARGB(255, 211, 17, 3) ,
+                              onPressed: () {
+                                showDialog(
+                                  context:context ,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text("Warning"),
+                                    content:  Text('Are you sure you want to delete the payment: ${paymentsList[index].title} ${paymentsList[index].amount.toString()} €"'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context), 
+                                        child: const Text("NO")
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          deletePayment(paymentsList[index].title,paymentsList[index].amount);
+                                          Navigator.pop(context);
+                                        }, 
+                                        child: const Text("YES")
+                                      )
+                                    ],
+                                  )
+                                );
+                              },
+                            )  
                         ])
                     ),
                   ),
@@ -121,5 +158,23 @@ class _PaymentsState extends State<Payments> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Future<void> deletePayment(String title, double amount) async{
+    List<dynamic> paymentsSlots = localStorage.get("Slots");
+    for(int i = 0; i < paymentsSlots.length; i++){
+      if(paymentsSlots[i].name == slotName){
+        paymentsSlots[i].removePayment(title,amount);
+        await localStorage.delete("Slots");
+        await localStorage.put('Slots', paymentsSlots);
+        
+        setState(() {
+          paymentsList = paymentsSlots[i].paymentsList;
+          slot = paymentsSlots[i];
+        });
+        break;
+      }
+    }
+    
   }
 }

@@ -26,4 +26,18 @@ class PaymentSlot extends HiveObject{
     totalMoneySpent += amount;
     paymentsList.add(Payment(title, amount));
   }
+
+  void removePayment(String title, double amount){
+    totalMoneySpent -= amount;
+    List<Payment> newPaymentsList = [];
+    bool flag = false;
+    for(int i = 0; i < paymentsList.length; i++){
+      if(!(paymentsList[i].title == title && paymentsList[i].amount == amount) || flag){
+        newPaymentsList.add(paymentsList[i]);
+      }else{
+        flag = true;
+      }
+    }
+    paymentsList = newPaymentsList;
+  }
 }

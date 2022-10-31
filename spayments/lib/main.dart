@@ -4,11 +4,11 @@ import 'package:spayments/pages/addPayment.dart';
 import 'package:spayments/pages/home.dart';
 import 'package:spayments/pages/loading.dart';
 import 'package:spayments/pages/login.dart';
+import 'package:spayments/pages/payments.dart';
+import 'package:spayments/pages/settings.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
 import 'package:spayments/models/paymentSlot.dart';
 import 'package:spayments/models/payment.dart';
-import 'package:spayments/pages/payments.dart';
 
 void main() async {
   //PaymentSlot x = PaymentSlot("Έξοδα εβδομάδας", 50, true);
@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //initialRoute: localStorage.get("Name") != null ? '/loading' : '/login',
       initialRoute:'/login',
       routes: {
       '/home': (context) =>  const Home(),
@@ -46,7 +45,8 @@ class MyApp extends StatelessWidget {
       '/loading': (context) => const Loading(),
       '/addpaymentslot': (context) => const AddPaymentSlot(),
       '/payments' : (context) => const Payments(),
-      '/addpayment' : (context) => const AddPayment()
+      '/addpayment' : (context) => const AddPayment(),
+      '/settings' : (context) => const Settings(),
     });     
   }
 }

@@ -21,13 +21,26 @@ class _LoadingState extends State<Loading> {
     
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor:Color.fromARGB(255, 7, 60, 103),
-      body: Center(
-        child: SpinKitDoubleBounce(
-          color: Colors.white,
-          size: 50.0,
-        )
+    return  Scaffold(
+      backgroundColor:const Color.fromARGB(255, 7, 60, 103),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const <Widget>[
+          SpinKitDoubleBounce(
+            color: Colors.white,
+            size: 50.0,
+          ),
+
+          SizedBox(height: 80),
+        
+          Text("@_@",style: 
+            TextStyle(
+              color: Color.fromARGB(255, 16, 74, 122),
+              fontSize: 30.0
+            )
+          )
+        ]
       )
     );
   }
