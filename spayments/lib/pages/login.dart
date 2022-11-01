@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:spayments/models/paymentSlot.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -17,9 +16,14 @@ class _LoginState extends State<Login> {
   bool firstLogIn = false;
   dynamic name = "";
   
+  @override
   void initState(){
     super.initState();
-    name = localStorage.get("Name") ==  null ? "" : localStorage.get("Name");
+    if(localStorage.get("Name") ==  null){
+      firstLogIn = true;
+    }else{
+      name = localStorage.get('Name');
+    }
   }
 
   @override
@@ -70,10 +74,11 @@ class _LoginState extends State<Login> {
                     child: TextField(
                       maxLength: 18,
                       decoration: InputDecoration(
+                        counterText: "",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
-                        labelText: 'Name',
+                        labelText: "What's your name ?",
                       ),
                       onChanged: (val) {
                         setState(() => name_input = val);
@@ -137,13 +142,16 @@ class _LoginState extends State<Login> {
       );
   }
 
-  Future<void> signIn() async{
-    if(name_input.trim() == "" && firstLogIn){
+  Future<void> signIn() async{ 
+    //if it is the first time opening the up stores the name of the user. 
+    //In other case goes to the next screen
+    if(!firstLogIn){
+      Navigator.pushReplacementNamed(context, "/loading");
+    }else if(name_input.trim() == ""){
       setState(() {
         error = "Please Enter your Name";
       });
     }else{
-
       await localStorage.put('Name', name_input);
       Navigator.pushReplacementNamed(context, "/loading");
     }
@@ -151,6 +159,6 @@ class _LoginState extends State<Login> {
 }
 
 Future<void> checkUser() async{
-    var box = await Hive.openBox('localStorage');
-    String name = box.get('Name');
+  var box = await Hive.openBox('localStorage');
+  String name = box.get('Name');
 }

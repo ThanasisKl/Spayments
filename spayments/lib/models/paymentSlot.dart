@@ -40,4 +40,14 @@ class PaymentSlot extends HiveObject{
     }
     paymentsList = newPaymentsList;
   }
+
+  void addNewLimit(double newLimit){
+    limitFlag = true;
+    limit = newLimit;
+  }
+
+  void removeLimit(){
+    limitFlag = false;
+    limit = -1;
+  }
 }

@@ -74,6 +74,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
                   child: TextField(
                     maxLength: 18,
                     decoration: InputDecoration(
+                      counterText: "",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(90.0),
                       ),
@@ -166,9 +167,10 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
   }
 
   Future<void> addPaymentCategory() async{
+    //adds a new payment category to the local database
     if(slotName.trim() == ""){
       setState(() {
-        error = "Please Enter your Name";
+        error = "Please Enter a proper Name";
       });
     }else if(categoryAlreadyExists()){
       setState(() {
@@ -176,7 +178,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
       });
     }else if(switchBtn && (double.tryParse(limit) == null || limit == "")){
       setState(() {
-        error = "Please put a numeric value as a limit";
+        error = "Please give a numeric value as a limit";
       });
     }else{
       List<dynamic> newSlots = localStorage.get("Slots");
@@ -193,6 +195,7 @@ class _AddPaymentSlotState extends State<AddPaymentSlot> {
   }
 
   bool categoryAlreadyExists(){
+    //checks if the category already exist in the local database
     List<dynamic> slots = localStorage.get("Slots");
     for(int i = 0; i<slots.length;i++){
       if(slots[i].name == slotName){

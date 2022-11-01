@@ -133,7 +133,7 @@ class _PaymentsState extends State<Payments> {
 
                             Expanded(
                               flex: 2,
-                              child: Text(paymentsList[index].amount.toString()+" €",
+                              child: Text(paymentsList[index].amount.toStringAsFixed(2).toString()+" €",
                                 style: const TextStyle(
                                   color: Color.fromARGB(255, 232, 23, 9),
                                 )
@@ -189,6 +189,7 @@ class _PaymentsState extends State<Payments> {
   }
 
   Future<void> deletePayment(String title, double amount) async{
+    //deletes a payment from a specific payment category
     List<dynamic> paymentsSlots = localStorage.get("Slots");
     for(int i = 0; i < paymentsSlots.length; i++){
       if(paymentsSlots[i].name == slotName){

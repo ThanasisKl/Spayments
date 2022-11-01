@@ -25,6 +25,7 @@ class _AddPaymentState extends State<AddPayment> {
     Map data = ModalRoute.of(context)?.settings.arguments as Map;
     slotName = data["slotName"];
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           leading: InkWell(
@@ -121,6 +122,7 @@ class _AddPaymentState extends State<AddPayment> {
                     child: TextField(
                       maxLength: 18,
                       decoration: InputDecoration(
+                        counterText: "",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                         ),
@@ -168,7 +170,8 @@ class _AddPaymentState extends State<AddPayment> {
     );
   }
 
-  Future<void> checkInputs() async{
+  Future<void> checkInputs() async{   
+    //checks if the user's money input contains the proper value
     if (double.tryParse(purchase_money) == null || purchase_money == ""){
       setState(() {
         error = "Please put a numeric value for Money";

@@ -14,6 +14,8 @@ class _HomeState extends State<Home> {
 
   //dynamic list = localStorage.get("Slots");
   List<dynamic> list = [];
+
+  @override
   void initState(){
     super.initState();
     list = localStorage.get("Slots").reversed.toList();
