@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
           backgroundColor: const Color.fromARGB(255, 7, 60, 103),
         ),
         body:
-          Center(
+          Center(child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 const SizedBox(height: 80.0,),
@@ -138,7 +138,7 @@ class _LoginState extends State<Login> {
               ],
             ),
           ),
-        ),
+        )),
       );
   }
 
