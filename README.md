@@ -16,3 +16,7 @@ The user has the opportunity to create **payment categories** and store inside t
 
 ## Settings Payments
 <img src="spayments/README_assets/settings.jpg" alt="First Screen" width="250"/> 
+<hr>
+
+## How to get the application
+The apk file is located at build/app/outputs/flutter-apk/app.apk
